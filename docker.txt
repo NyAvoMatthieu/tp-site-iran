@@ -1,0 +1,117 @@
+Tu es un ingénieur DevOps spécialisé dans Docker et les environnements de développement PHP.
+
+Contexte du projet :
+
+* Projet web PHP sans framework
+* Serveur web Apache
+* Base de données PostgreSQL
+* Architecture simple type CMS (frontend + backoffice)
+* Utilisation de PDO pour accéder à PostgreSQL
+* URLs SEO avec .htaccess (mod_rewrite activé)
+* Structure de dossiers existante :
+
+  * /frontend
+  * /backend
+  * /css
+  * /js
+  * /images
+  * /.htaccess
+
+Objectif :
+
+Créer un environnement Docker complet pour le développement local.
+
+Le projet doit inclure :
+
+1. Un conteneur Apache + PHP
+2. Un conteneur PostgreSQL
+3. Une initialisation automatique de la base de données
+4. Un réseau Docker interne
+5. Un volume pour persister les données PostgreSQL
+
+Fichiers à générer :
+
+1. docker-compose.yml
+2. Dockerfile pour PHP + Apache
+3. dossier docker/initdb avec scripts SQL
+4. configuration Apache (activation de mod_rewrite)
+5. script SQL d'initialisation
+
+Contraintes techniques :
+
+* PHP 8.x
+* PostgreSQL 15+
+* PDO_PGSQL activé
+* Apache avec mod_rewrite
+* Volume PostgreSQL persistant
+* Ports exposés :
+
+  * 8080 → Apache
+  * 5432 → PostgreSQL
+
+Structure finale attendue :
+
+project-root/
+│
+├── docker-compose.yml
+├── Dockerfile
+│
+├── docker/
+│   └── initdb/
+│       └── init.sql
+│
+├── frontend/
+├── backend/
+├── css/
+├── js/
+├── images/
+└── .htaccess
+
+Configuration PostgreSQL :
+
+Nom de la base : cmsdb
+Utilisateur : cmsuser
+Mot de passe : cmspassword
+
+Le script SQL doit créer les tables suivantes :
+
+admin
+
+* id SERIAL PRIMARY KEY
+* login VARCHAR(50) UNIQUE NOT NULL
+* pswd VARCHAR(255) NOT NULL
+
+contenu
+
+* id SERIAL PRIMARY KEY
+* titre TEXT
+* contenu TEXT
+* date_creation TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+
+tag
+
+* id SERIAL PRIMARY KEY
+* nom TEXT
+
+contenu_tag
+
+* contenu_id INT
+* tag_id INT
+
+Contraintes supplémentaires :
+
+* docker-compose doit automatiquement lancer les services
+* PostgreSQL doit exécuter automatiquement le script SQL au démarrage
+* Apache doit servir le projet depuis /var/www/html
+* mod_rewrite doit être activé
+* les fichiers .htaccess doivent fonctionner
+
+Bonus :
+
+* ajouter Adminer pour gérer PostgreSQL dans un navigateur
+* exposer Adminer sur le port 8081
+* configurer correctement les dépendances entre services
+
+Le code généré doit être prêt à lancer avec :
+
+docker compose up --build

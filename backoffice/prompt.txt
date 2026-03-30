@@ -1,0 +1,96 @@
+Create a simple PHP backoffice to manage articles for a news website about the Iran war.
+
+Technologies:
+- PHP (procedural)
+- PostgreSQL
+- HTML + CSS
+- No frameworks
+
+Database schema:
+
+type_contenu(id, libelle)
+
+contenu(
+id,
+id_type,
+titre,
+slug,
+details,
+created_at,
+updated_at
+)
+
+image(id, id_contenu, url)
+
+tag(id, libelle)
+
+contenu_tag(id_contenu, id_tag)
+
+---
+
+Project structure:
+
+backend/
+    index.php
+    dashboard.php
+    db.php
+    contenu/
+        liste.php
+        ajouter.php
+        modifier.php
+        supprimer.php
+    tag/
+        liste.php
+        ajouter.php
+    image/
+        ajouter.php
+        supprimer.php
+    .htaccess (empty)
+
+---
+
+Requirements:
+
+1. db.php
+- PDO PostgreSQL connection
+- host=localhost, dbname=iran_war, user=postgres, password=postgres
+
+2. dashboard.php
+- `<h1>` for main dashboard title
+- Links to manage articles, tags, images
+
+3. contenu/liste.php
+- Display all articles
+- `<h2>` for article titles
+- Include slug, created_at
+- Edit / delete links
+
+4. contenu/ajouter.php
+- Form to create a new article
+- `<h2>` for page title
+- Fields: title, slug, type, details
+- Insert into table `contenu`
+
+5. contenu/modifier.php
+- Edit an existing article
+- `<h2>` for page title
+
+6. contenu/supprimer.php
+- Delete article by id
+
+7. tag management pages
+- Simple CRUD
+- Use `<h2>` or `<h3>` for headings
+
+8. image management
+- Add image URLs linked to articles
+- Include `alt` attributes
+
+9. Pages must include `<title>` and `<meta>` description for SEO
+
+10. HTML should be semantic (h1-h6 hierarchy)
+11. CSS minimal for readability
+12. Code must pass Lighthouse local tests:
+    - Mobile and desktop
+    - SEO
+    - Accessibility

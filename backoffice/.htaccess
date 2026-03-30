@@ -1,0 +1,12 @@
+# Options -MultiViews
+Options +FollowSymLinks
+
+RewriteEngine On
+
+
+RewriteCond %{REQUEST_FILENAME} -f
+RewriteRule ^ - [L]
+
+# Route : contenu-liste → contenu/liste.php
+# Route : tag-liste → tag/liste.php
+RewriteRule ^([_a-z0-9]+)-liste$ $1/liste.php [L]

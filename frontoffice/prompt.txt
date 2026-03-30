@@ -1,0 +1,72 @@
+Create a simple PHP frontoffice for a news website about the Iran war.
+
+Technologies:
+- PHP (procedural)
+- PostgreSQL
+- HTML + CSS
+- No frameworks
+
+Database schema:
+
+type_contenu(id, libelle)
+
+contenu(
+id,
+id_type,
+titre,
+slug,
+details,
+created_at,
+updated_at
+)
+
+image(id, id_contenu, url)
+
+tag(id, libelle)
+
+contenu_tag(id_contenu, id_tag)
+
+---
+
+Project structure:
+
+frontend/
+    index.php
+    article.php
+    db.php
+    css/
+        style.css
+    js/
+        script.js
+    images/
+    .htaccess (empty)
+
+---
+
+Requirements:
+
+1. db.php
+- PostgreSQL connection using PDO
+- host=localhost, dbname=iran_war, user=postgres, password=postgres
+
+2. index.php
+- Display a list of articles ordered by created_at DESC
+- Use `<h1>` for the main page title
+- `<h2>` for each article title in the list
+- Each article shows a short excerpt (first 150 chars)
+- Link to article page using slug: article/{slug}
+
+3. article.php
+- Get slug from $_GET['slug']
+- Retrieve article, images, tags
+- Use `<h1>` for article title, `<h2>`/`<h3>` for subheadings if needed
+- Include `<meta name="description">` and `<meta name="keywords">` based on article content
+- All images must have meaningful `alt` attributes
+- Tags can be displayed in `<h4>` or `<span>` with proper styling
+
+4. HTML should be semantic and structured for SEO
+5. Include minimal CSS for readability
+6. Code must be easily testable with Lighthouse locally for:
+    - Mobile and desktop
+    - SEO
+    - Accessibility

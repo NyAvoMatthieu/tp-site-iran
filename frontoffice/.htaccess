@@ -1,0 +1,7 @@
+# Redirect article/slug to article.php?slug=slug
+#Options -MultiViews
+Options +FollowSymLinks
+RewriteEngine On
+
+# Route: article/{slug} → article.php?slug={slug}
+RewriteRule ^article/([A-Za-z0-9_-]+)$ article.php?slug=$1 [L,QSA]
