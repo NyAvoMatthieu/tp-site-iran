@@ -120,7 +120,6 @@ $base = bo_base_path();
                     <thead>
                         <tr>
                             <th scope="col">Preview</th>
-                            <th scope="col">URL</th>
                             <th scope="col">Article</th>
                             <th scope="col">Actions</th>
                         </tr>
@@ -134,13 +133,6 @@ $base = bo_base_path();
                                         loading="lazy"
                                         width="72" height="48"
                                         style="object-fit:cover;border-radius:var(--radius-sm);border:1px solid var(--clr-border);">
-                                </td>
-                                <td style="max-width:280px;word-break:break-all;">
-                                    <a href="<?= htmlspecialchars($img['url']) ?>" target="_blank" rel="noopener noreferrer"
-                                        style="font-size:.8rem;"
-                                        aria-label="Open image in new tab">
-                                        <?= htmlspecialchars(mb_substr($img['url'], 0, 60)) ?>…
-                                    </a>
                                 </td>
                                 <td style="font-size:.85rem;"><?= htmlspecialchars($img['article_titre']) ?></td>
                                 <td class="actions">
