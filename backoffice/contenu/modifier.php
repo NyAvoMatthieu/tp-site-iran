@@ -1,6 +1,9 @@
 <?php
 require_once __DIR__ . '/../db.php';
+require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../layout.php';
+
+admin_require_auth();
 
 $pdo   = getDB();
 $error = '';
@@ -104,16 +107,16 @@ bo_nav('articles');
             <div class="form-group">
                 <label for="titre">Title <span aria-hidden="true" style="color:var(--clr-accent)">*</span></label>
                 <input type="text" id="titre" name="titre" required
-                       value="<?= htmlspecialchars($article['titre']) ?>"
-                       autocomplete="off">
+                    value="<?= htmlspecialchars($article['titre']) ?>"
+                    autocomplete="off">
             </div>
 
             <div class="form-group">
                 <label for="slug">Slug <span aria-hidden="true" style="color:var(--clr-accent)">*</span></label>
                 <input type="text" id="slug" name="slug"
-                       value="<?= htmlspecialchars($article['slug']) ?>"
-                       pattern="[a-z0-9\-]+"
-                       autocomplete="off">
+                    value="<?= htmlspecialchars($article['slug']) ?>"
+                    pattern="[a-z0-9\-]+"
+                    autocomplete="off">
                 <p class="form-hint">Changing the slug will break existing links.</p>
             </div>
 
@@ -122,10 +125,10 @@ bo_nav('articles');
                 <select id="id_type" name="id_type">
                     <option value="">— None —</option>
                     <?php foreach ($types as $t): ?>
-                    <option value="<?= $t['id'] ?>"
-                        <?= ($article['id_type'] == $t['id']) ? 'selected' : '' ?>>
-                        <?= htmlspecialchars($t['libelle']) ?>
-                    </option>
+                        <option value="<?= $t['id'] ?>"
+                            <?= ($article['id_type'] == $t['id']) ? 'selected' : '' ?>>
+                            <?= htmlspecialchars($t['libelle']) ?>
+                        </option>
                     <?php endforeach; ?>
                 </select>
             </div>
@@ -136,19 +139,19 @@ bo_nav('articles');
             </div>
 
             <?php if (!empty($tags)): ?>
-            <div class="form-group">
-                <label>Tags</label>
-                <div class="checkbox-grid" role="group" aria-label="Select tags">
-                    <?php foreach ($tags as $tag): ?>
-                    <label class="checkbox-item">
-                        <input type="checkbox" name="tags[]"
-                               value="<?= $tag['id'] ?>"
-                               <?= in_array((int)$tag['id'], array_map('intval', $currentTagIds)) ? 'checked' : '' ?>>
-                        <span><?= htmlspecialchars($tag['libelle']) ?></span>
-                    </label>
-                    <?php endforeach; ?>
+                <div class="form-group">
+                    <label>Tags</label>
+                    <div class="checkbox-grid" role="group" aria-label="Select tags">
+                        <?php foreach ($tags as $tag): ?>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="tags[]"
+                                    value="<?= $tag['id'] ?>"
+                                    <?= in_array((int)$tag['id'], array_map('intval', $currentTagIds)) ? 'checked' : '' ?>>
+                                <span><?= htmlspecialchars($tag['libelle']) ?></span>
+                            </label>
+                        <?php endforeach; ?>
+                    </div>
                 </div>
-            </div>
             <?php endif; ?>
 
             <div class="form-actions">

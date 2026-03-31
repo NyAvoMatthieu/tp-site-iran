@@ -1,38 +1,84 @@
 <?php
 
-/**
- * auth.php – Garde d'authentification
- * ─────────────────────────────────────
- * À inclure en PREMIÈRE ligne de chaque page protégée du backoffice.
- * Démarre la session si elle n'est pas encore active, puis vérifie
- * que l'administrateur est bien connecté. Sinon redirige vers login.php.
- */
-
 declare(strict_types=1);
 
-// Démarrer la session une seule fois
-if (session_status() === PHP_SESSION_NONE) {
-    session_start();
+function admin_session_start(): void
+{
+    if (session_status() === PHP_SESSION_ACTIVE) {
+        return;
+    }
+
+    session_start([
+        'cookie_httponly' => true,
+        'cookie_samesite' => 'Lax',
+        'use_strict_mode' => true,
+    ]);
 }
 
-// ── Calcul de l'URL absolue vers login.php ───────────────────────────────────
-// auth.php se trouve dans backoffice/includes/ → login.php est dans backoffice/
-$_auth_docRoot     = rtrim(str_replace('\\', '/', $_SERVER['DOCUMENT_ROOT'] ?? ''), '/');
-$_auth_backoffice  = rtrim(str_replace('\\', '/', dirname(__DIR__)), '/');
+function backoffice_base_url(): string
+{
+    $scriptName = str_replace('\\', '/', (string) ($_SERVER['SCRIPT_NAME'] ?? ''));
+    if ($scriptName !== '' && preg_match('#^(.*?/backoffice)(?:/|$)#i', $scriptName, $m)) {
+        return rtrim($m[1], '/') . '/';
+    }
 
-if ($_auth_docRoot !== '' && str_starts_with($_auth_backoffice, $_auth_docRoot)) {
-    $_auth_loginUrl = substr($_auth_backoffice, strlen($_auth_docRoot)) . '/login.php';
-} else {
-    $_auth_loginUrl = '../login.php';   // fallback relatif
+    $docRoot = rtrim(str_replace('\\', '/', (string) ($_SERVER['DOCUMENT_ROOT'] ?? '')), '/');
+    $boDir   = rtrim(str_replace('\\', '/', dirname(__DIR__)), '/');
+
+    if ($docRoot !== '' && str_starts_with($boDir, $docRoot)) {
+        return substr($boDir, strlen($docRoot)) . '/';
+    }
+
+    return '/backoffice/';
 }
 
-// ── Vérification de la session ───────────────────────────────────────────────
-if (empty($_SESSION['admin_id'])) {
-    // Mémoriser la page demandée pour redirection post-login (optionnel)
+function admin_login_url(): string
+{
+    return backoffice_base_url() . 'login';
+}
+
+function admin_dashboard_url(): string
+{
+    return backoffice_base_url() . 'dashboard';
+}
+
+function admin_is_logged_in(): bool
+{
+    admin_session_start();
+    return !empty($_SESSION['admin_id']) && !empty($_SESSION['admin_login']);
+}
+
+function admin_require_auth(): void
+{
+    admin_session_start();
+
+    if (admin_is_logged_in()) {
+        return;
+    }
+
     $_SESSION['redirect_after_login'] = $_SERVER['REQUEST_URI'] ?? '';
-    header('Location: ' . $_auth_loginUrl);
+    header('Location: ' . admin_login_url());
     exit;
 }
 
-// Nettoyage des variables temporaires pour ne pas polluer la portée globale
-unset($_auth_docRoot, $_auth_backoffice, $_auth_loginUrl);
+function admin_csrf_token(): string
+{
+    admin_session_start();
+
+    if (empty($_SESSION['csrf_token']) || !is_string($_SESSION['csrf_token'])) {
+        $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+    }
+
+    return $_SESSION['csrf_token'];
+}
+
+function admin_validate_csrf(?string $token): bool
+{
+    admin_session_start();
+    $sessionToken = $_SESSION['csrf_token'] ?? '';
+
+    return is_string($token)
+        && is_string($sessionToken)
+        && $sessionToken !== ''
+        && hash_equals($sessionToken, $token);
+}

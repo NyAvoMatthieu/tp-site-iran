@@ -1,6 +1,9 @@
 <?php
 require_once __DIR__ . '/../db.php';
+require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../layout.php';
+
+admin_require_auth();
 
 $pdo   = getDB();
 $error = '';
@@ -66,11 +69,11 @@ bo_nav('images');
                 <select id="id_contenu" name="id_contenu" required>
                     <option value="">— Select article —</option>
                     <?php foreach ($articles as $art): ?>
-                    <option value="<?= $art['id'] ?>"
-                        <?= (($_POST['id_contenu'] ?? '') == $art['id']) ? 'selected' : '' ?>>
-                        <?= htmlspecialchars($art['titre']) ?>
-                        [<?= htmlspecialchars($art['slug']) ?>]
-                    </option>
+                        <option value="<?= $art['id'] ?>"
+                            <?= (($_POST['id_contenu'] ?? '') == $art['id']) ? 'selected' : '' ?>>
+                            <?= htmlspecialchars($art['titre']) ?>
+                            [<?= htmlspecialchars($art['slug']) ?>]
+                        </option>
                     <?php endforeach; ?>
                 </select>
             </div>
@@ -78,9 +81,9 @@ bo_nav('images');
             <div class="form-group">
                 <label for="url">Image URL <span aria-hidden="true" style="color:var(--clr-accent)">*</span></label>
                 <input type="url" id="url" name="url" required
-                       value="<?= htmlspecialchars($_POST['url'] ?? '') ?>"
-                       placeholder="https://example.com/image.jpg"
-                       autocomplete="off">
+                    value="<?= htmlspecialchars($_POST['url'] ?? '') ?>"
+                    placeholder="https://example.com/image.jpg"
+                    autocomplete="off">
                 <p class="form-hint">Must be a publicly accessible URL. The alt text is auto-derived from the article title.</p>
             </div>
 
@@ -90,7 +93,7 @@ bo_nav('images');
                     Preview
                 </p>
                 <img id="img-preview" src="" alt="Preview of entered image URL"
-                     style="max-height:220px;border-radius:var(--radius-md);border:1px solid var(--clr-border);">
+                    style="max-height:220px;border-radius:var(--radius-md);border:1px solid var(--clr-border);">
             </div>
 
             <div class="form-actions">
@@ -107,77 +110,86 @@ bo_nav('images');
         </h2>
 
         <?php if (empty($images)): ?>
-        <div class="empty-state" role="status"><p>No images linked yet.</p></div>
+            <div class="empty-state" role="status">
+                <p>No images linked yet.</p>
+            </div>
         <?php else: ?>
-        <div class="bo-table-wrap">
-            <table class="bo-table" aria-label="Linked images">
-                <thead>
-                    <tr>
-                        <th scope="col">Preview</th>
-                        <th scope="col">URL</th>
-                        <th scope="col">Article</th>
-                        <th scope="col">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($images as $img): ?>
-                    <tr>
-                        <td style="width:80px;">
-                            <img src="<?= htmlspecialchars($img['url']) ?>"
-                                 alt="Thumbnail for article: <?= htmlspecialchars($img['article_titre']) ?>"
-                                 loading="lazy"
-                                 width="72" height="48"
-                                 style="object-fit:cover;border-radius:var(--radius-sm);border:1px solid var(--clr-border);">
-                        </td>
-                        <td style="max-width:280px;word-break:break-all;">
-                            <a href="<?= htmlspecialchars($img['url']) ?>" target="_blank" rel="noopener noreferrer"
-                               style="font-size:.8rem;"
-                               aria-label="Open image in new tab">
-                                <?= htmlspecialchars(mb_substr($img['url'], 0, 60)) ?>…
-                            </a>
-                        </td>
-                        <td style="font-size:.85rem;"><?= htmlspecialchars($img['article_titre']) ?></td>
-                        <td class="actions">
-                            <form method="post" action="supprimer.php"
-                                  onsubmit="return confirm('Remove this image link?')"
-                                  aria-label="Delete image #<?= $img['id'] ?>">
-                                <input type="hidden" name="id" value="<?= $img['id'] ?>">
-                                <button type="submit" class="btn btn-danger btn-sm"
-                                        id="btn-del-img-<?= $img['id'] ?>">
-                                    🗑 Remove
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        </div>
+            <div class="bo-table-wrap">
+                <table class="bo-table" aria-label="Linked images">
+                    <thead>
+                        <tr>
+                            <th scope="col">Preview</th>
+                            <th scope="col">URL</th>
+                            <th scope="col">Article</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($images as $img): ?>
+                            <tr>
+                                <td style="width:80px;">
+                                    <img src="<?= htmlspecialchars($img['url']) ?>"
+                                        alt="Thumbnail for article: <?= htmlspecialchars($img['article_titre']) ?>"
+                                        loading="lazy"
+                                        width="72" height="48"
+                                        style="object-fit:cover;border-radius:var(--radius-sm);border:1px solid var(--clr-border);">
+                                </td>
+                                <td style="max-width:280px;word-break:break-all;">
+                                    <a href="<?= htmlspecialchars($img['url']) ?>" target="_blank" rel="noopener noreferrer"
+                                        style="font-size:.8rem;"
+                                        aria-label="Open image in new tab">
+                                        <?= htmlspecialchars(mb_substr($img['url'], 0, 60)) ?>…
+                                    </a>
+                                </td>
+                                <td style="font-size:.85rem;"><?= htmlspecialchars($img['article_titre']) ?></td>
+                                <td class="actions">
+                                    <form method="post" action="supprimer.php"
+                                        onsubmit="return confirm('Remove this image link?')"
+                                        aria-label="Delete image #<?= $img['id'] ?>">
+                                        <input type="hidden" name="id" value="<?= $img['id'] ?>">
+                                        <button type="submit" class="btn btn-danger btn-sm"
+                                            id="btn-del-img-<?= $img['id'] ?>">
+                                            🗑 Remove
+                                        </button>
+                                    </form>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
         <?php endif; ?>
     </section>
 
 </main>
 
 <script>
-/* Live URL preview */
-(function(){
-    var urlInput   = document.getElementById('url');
-    var preview    = document.getElementById('img-preview');
-    var previewWrap= document.getElementById('preview-wrap');
-    if (!urlInput || !preview) return;
+    /* Live URL preview */
+    (function() {
+        var urlInput = document.getElementById('url');
+        var preview = document.getElementById('img-preview');
+        var previewWrap = document.getElementById('preview-wrap');
+        if (!urlInput || !preview) return;
 
-    var timer;
-    urlInput.addEventListener('input', function(){
-        clearTimeout(timer);
-        timer = setTimeout(function(){
-            var v = urlInput.value.trim();
-            if (!v) { previewWrap.style.display = 'none'; return; }
-            preview.src = v;
-            preview.onload  = function(){ previewWrap.style.display = 'block'; };
-            preview.onerror = function(){ previewWrap.style.display = 'none'; };
-        }, 600);
-    });
-})();
+        var timer;
+        urlInput.addEventListener('input', function() {
+            clearTimeout(timer);
+            timer = setTimeout(function() {
+                var v = urlInput.value.trim();
+                if (!v) {
+                    previewWrap.style.display = 'none';
+                    return;
+                }
+                preview.src = v;
+                preview.onload = function() {
+                    previewWrap.style.display = 'block';
+                };
+                preview.onerror = function() {
+                    previewWrap.style.display = 'none';
+                };
+            }, 600);
+        });
+    })();
 </script>
 
 <?php bo_foot(); ?>

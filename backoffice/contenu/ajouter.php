@@ -1,6 +1,9 @@
 <?php
 require_once __DIR__ . '/../db.php';
+require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../layout.php';
+
+admin_require_auth();
 
 $pdo    = getDB();
 $error  = '';
@@ -80,18 +83,18 @@ bo_nav('articles');
             <div class="form-group">
                 <label for="titre">Title <span aria-hidden="true" style="color:var(--clr-accent)">*</span></label>
                 <input type="text" id="titre" name="titre" required
-                       value="<?= htmlspecialchars($_POST['titre'] ?? '') ?>"
-                       placeholder="Enter article title"
-                       autocomplete="off">
+                    value="<?= htmlspecialchars($_POST['titre'] ?? '') ?>"
+                    placeholder="Enter article title"
+                    autocomplete="off">
             </div>
 
             <div class="form-group">
                 <label for="slug">Slug <span aria-hidden="true" style="color:var(--clr-accent)">*</span></label>
                 <input type="text" id="slug" name="slug"
-                       value="<?= htmlspecialchars($_POST['slug'] ?? '') ?>"
-                       placeholder="auto-generated-from-title"
-                       pattern="[a-z0-9\-]+"
-                       autocomplete="off">
+                    value="<?= htmlspecialchars($_POST['slug'] ?? '') ?>"
+                    placeholder="auto-generated-from-title"
+                    pattern="[a-z0-9\-]+"
+                    autocomplete="off">
                 <p class="form-hint" id="slug-hint">Lowercase, hyphens only. Auto-fills from title.</p>
             </div>
 
@@ -100,10 +103,10 @@ bo_nav('articles');
                 <select id="id_type" name="id_type">
                     <option value="">— Select type —</option>
                     <?php foreach ($types as $t): ?>
-                    <option value="<?= $t['id'] ?>"
-                        <?= (($_POST['id_type'] ?? '') == $t['id']) ? 'selected' : '' ?>>
-                        <?= htmlspecialchars($t['libelle']) ?>
-                    </option>
+                        <option value="<?= $t['id'] ?>"
+                            <?= (($_POST['id_type'] ?? '') == $t['id']) ? 'selected' : '' ?>>
+                            <?= htmlspecialchars($t['libelle']) ?>
+                        </option>
                     <?php endforeach; ?>
                 </select>
             </div>
@@ -111,23 +114,23 @@ bo_nav('articles');
             <div class="form-group">
                 <label for="details">Content <span aria-hidden="true" style="color:var(--clr-accent)">*</span></label>
                 <textarea id="details" name="details" required
-                          placeholder="Write the full article content here…"><?= htmlspecialchars($_POST['details'] ?? '') ?></textarea>
+                    placeholder="Write the full article content here…"><?= htmlspecialchars($_POST['details'] ?? '') ?></textarea>
             </div>
 
             <?php if (!empty($tags)): ?>
-            <div class="form-group">
-                <label>Tags</label>
-                <div class="checkbox-grid" role="group" aria-label="Select tags">
-                    <?php foreach ($tags as $tag): ?>
-                    <label class="checkbox-item">
-                        <input type="checkbox" name="tags[]"
-                               value="<?= $tag['id'] ?>"
-                               <?= in_array($tag['id'], (array)($_POST['tags'] ?? [])) ? 'checked' : '' ?>>
-                        <span><?= htmlspecialchars($tag['libelle']) ?></span>
-                    </label>
-                    <?php endforeach; ?>
+                <div class="form-group">
+                    <label>Tags</label>
+                    <div class="checkbox-grid" role="group" aria-label="Select tags">
+                        <?php foreach ($tags as $tag): ?>
+                            <label class="checkbox-item">
+                                <input type="checkbox" name="tags[]"
+                                    value="<?= $tag['id'] ?>"
+                                    <?= in_array($tag['id'], (array)($_POST['tags'] ?? [])) ? 'checked' : '' ?>>
+                                <span><?= htmlspecialchars($tag['libelle']) ?></span>
+                            </label>
+                        <?php endforeach; ?>
+                    </div>
                 </div>
-            </div>
             <?php endif; ?>
 
             <div class="form-actions">
@@ -140,19 +143,21 @@ bo_nav('articles');
 </main>
 
 <script>
-/* Auto-generate slug from title */
-(function(){
-    var titre = document.getElementById('titre');
-    var slug  = document.getElementById('slug');
-    if (!titre || !slug) return;
-    titre.addEventListener('input', function(){
-        if (slug.dataset.manual) return;
-        slug.value = titre.value.toLowerCase()
-            .replace(/[^a-z0-9\s-]/g, '')
-            .trim().replace(/[\s_]+/g, '-').replace(/-+/g, '-');
-    });
-    slug.addEventListener('input', function(){ slug.dataset.manual = '1'; });
-})();
+    /* Auto-generate slug from title */
+    (function() {
+        var titre = document.getElementById('titre');
+        var slug = document.getElementById('slug');
+        if (!titre || !slug) return;
+        titre.addEventListener('input', function() {
+            if (slug.dataset.manual) return;
+            slug.value = titre.value.toLowerCase()
+                .replace(/[^a-z0-9\s-]/g, '')
+                .trim().replace(/[\s_]+/g, '-').replace(/-+/g, '-');
+        });
+        slug.addEventListener('input', function() {
+            slug.dataset.manual = '1';
+        });
+    })();
 </script>
 
 <?php bo_foot(); ?>

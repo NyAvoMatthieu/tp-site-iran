@@ -50,11 +50,16 @@ HTML;
 function bo_nav(string $active = ''): void
 {
     $base  = bo_base_path();
+    if (function_exists('admin_session_start')) {
+        admin_session_start();
+    }
+    $adminLogin = htmlspecialchars((string) ($_SESSION['admin_login'] ?? 'admin'));
     $links = [
-        'dashboard' => [$base . 'dashboard.php',       '🏠 Dashboard'],
+        'dashboard' => [$base . 'dashboard',       '🏠 Dashboard'],
         'articles'  => [$base . 'contenu-liste',   '📰 Articles'],
         'tags'      => [$base . 'tag-liste',        '🏷️ Tags'],
-        'images'    => [$base . 'image/ajouter.php',    '🖼️ Images'],
+        'images'    => [$base . 'ajouter-image',    '🖼️ Images'],
+        'logout'    => [$base . 'logout',           '🚪 Logout'],
     ];
     echo '<header class="bo-header" role="banner">';
     echo '<div class="bo-logo"><span class="bo-logo-icon">⚡</span><span>IranWatch</span><sup>Admin</sup></div>';
@@ -63,7 +68,9 @@ function bo_nav(string $active = ''): void
         $cls = ($key === $active) ? ' class="active" aria-current="page"' : '';
         echo "<li><a href=\"{$href}\"{$cls}>{$label}</a></li>";
     }
-    echo '</ul></nav></header>';
+    echo '</ul></nav>';
+    echo '<div class="bo-user" style="color:#fff;font-size:.9rem;opacity:.9;">Connected: <strong>' . $adminLogin . '</strong></div>';
+    echo '</header>';
 }
 
 function bo_foot(): void

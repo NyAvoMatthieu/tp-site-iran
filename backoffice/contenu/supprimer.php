@@ -1,6 +1,9 @@
 <?php
 require_once __DIR__ . '/../db.php';
+require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../layout.php';
+
+admin_require_auth();
 
 $pdo = getDB();
 $id  = (int) ($_GET['id'] ?? $_POST['id'] ?? 0);
@@ -46,7 +49,7 @@ bo_nav('articles');
 <main id="main-content" class="bo-page" role="main">
 
     <?php if (isset($errorMsg)): ?>
-    <?php bo_flash($errorMsg, 'error'); ?>
+        <?php bo_flash($errorMsg, 'error'); ?>
     <?php endif; ?>
 
     <div class="confirm-box" role="alertdialog" aria-modal="false" aria-labelledby="confirm-title" aria-describedby="confirm-desc">
@@ -60,7 +63,7 @@ bo_nav('articles');
 
         <div class="confirm-actions">
             <form method="post" action="">
-                <input type="hidden" name="id"      value="<?= $id ?>">
+                <input type="hidden" name="id" value="<?= $id ?>">
                 <input type="hidden" name="confirm" value="yes">
                 <button type="submit" class="btn btn-danger" id="btn-confirm-delete">
                     🗑 Yes, delete permanently

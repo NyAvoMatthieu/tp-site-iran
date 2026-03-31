@@ -1,6 +1,9 @@
 <?php
 require_once __DIR__ . '/../db.php';
+require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../layout.php';
+
+admin_require_auth();
 
 $pdo = getDB();
 $id  = (int) ($_POST['id'] ?? 0);

@@ -1,6 +1,9 @@
 <?php
 require_once __DIR__ . '/../db.php';
+require_once __DIR__ . '/../includes/auth.php';
 require_once __DIR__ . '/../layout.php';
+
+admin_require_auth();
 
 $pdo   = getDB();
 $error = '';
@@ -49,10 +52,10 @@ bo_nav('tags');
             <div class="form-group">
                 <label for="libelle">Tag name <span aria-hidden="true" style="color:var(--clr-accent)">*</span></label>
                 <input type="text" id="libelle" name="libelle" required
-                       value="<?= htmlspecialchars($_POST['libelle'] ?? '') ?>"
-                       placeholder="e.g. Iran, Sanctions, Military…"
-                       autocomplete="off"
-                       maxlength="80">
+                    value="<?= htmlspecialchars($_POST['libelle'] ?? '') ?>"
+                    placeholder="e.g. Iran, Sanctions, Military…"
+                    autocomplete="off"
+                    maxlength="80">
             </div>
 
             <div class="form-actions">

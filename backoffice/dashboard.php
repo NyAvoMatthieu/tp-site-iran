@@ -1,6 +1,9 @@
 <?php
 require_once __DIR__ . '/db.php';
+require_once __DIR__ . '/includes/auth.php';
 require_once __DIR__ . '/layout.php';
+
+admin_require_auth();
 
 $pdo = getDB();
 
@@ -78,35 +81,35 @@ bo_nav('dashboard');
 
     <!-- Recent articles -->
     <?php if (!empty($recent)): ?>
-    <section class="recent-section" style="margin-top:2.5rem;" aria-labelledby="recent-title">
-        <h2 id="recent-title" style="font-family:var(--font-heading);font-size:1.2rem;color:var(--clr-white);margin-bottom:1rem;">
-            Recent Articles
-        </h2>
-        <div class="bo-table-wrap">
-            <table class="bo-table" aria-label="5 most recent articles">
-                <thead>
-                    <tr>
-                        <th scope="col">Title</th>
-                        <th scope="col">Slug</th>
-                        <th scope="col">Published</th>
-                        <th scope="col">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <?php foreach ($recent as $art): ?>
-                    <tr>
-                        <td><?= htmlspecialchars($art['titre']) ?></td>
-                        <td><span class="slug-pill"><?= htmlspecialchars($art['slug']) ?></span></td>
-                        <td><?= date('d M Y', strtotime($art['created_at'])) ?></td>
-                        <td class="actions">
-                            <a href="contenu/liste.php" class="btn btn-secondary btn-sm">View all</a>
-                        </td>
-                    </tr>
-                    <?php endforeach; ?>
-                </tbody>
-            </table>
-        </div>
-    </section>
+        <section class="recent-section" style="margin-top:2.5rem;" aria-labelledby="recent-title">
+            <h2 id="recent-title" style="font-family:var(--font-heading);font-size:1.2rem;color:var(--clr-white);margin-bottom:1rem;">
+                Recent Articles
+            </h2>
+            <div class="bo-table-wrap">
+                <table class="bo-table" aria-label="5 most recent articles">
+                    <thead>
+                        <tr>
+                            <th scope="col">Title</th>
+                            <th scope="col">Slug</th>
+                            <th scope="col">Published</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <?php foreach ($recent as $art): ?>
+                            <tr>
+                                <td><?= htmlspecialchars($art['titre']) ?></td>
+                                <td><span class="slug-pill"><?= htmlspecialchars($art['slug']) ?></span></td>
+                                <td><?= date('d M Y', strtotime($art['created_at'])) ?></td>
+                                <td class="actions">
+                                    <a href="contenu/liste.php" class="btn btn-secondary btn-sm">View all</a>
+                                </td>
+                            </tr>
+                        <?php endforeach; ?>
+                    </tbody>
+                </table>
+            </div>
+        </section>
     <?php endif; ?>
 
 </main>
