@@ -120,7 +120,6 @@ $base = bo_base_path();
                     <thead>
                         <tr>
                             <th scope="col">Preview</th>
-                            <th scope="col">URL</th>
                             <th scope="col">Article</th>
                             <th scope="col">Actions</th>
                         </tr>
@@ -129,18 +128,18 @@ $base = bo_base_path();
                         <?php foreach ($images as $img): ?>
                             <tr>
                                 <td style="width:80px;">
-                                    <img src="<?= htmlspecialchars($img['url']) ?>"
+                                    <?php
+                                    $image_url = $img['url'];
+                                    // Convert relative paths to correct frontoffice path
+                                    if (strpos($image_url, 'http') !== 0 && !str_starts_with($image_url, '/')) {
+                                        $image_url = '../frontoffice/' . $image_url;
+                                    }
+                                    ?>
+                                    <img src="<?= htmlspecialchars($image_url) ?>"
                                         alt="Thumbnail for article: <?= htmlspecialchars($img['article_titre']) ?>"
                                         loading="lazy"
                                         width="72" height="48"
                                         style="object-fit:cover;border-radius:var(--radius-sm);border:1px solid var(--clr-border);">
-                                </td>
-                                <td style="max-width:280px;word-break:break-all;">
-                                    <a href="<?= htmlspecialchars($img['url']) ?>" target="_blank" rel="noopener noreferrer"
-                                        style="font-size:.8rem;"
-                                        aria-label="Open image in new tab">
-                                        <?= htmlspecialchars(mb_substr($img['url'], 0, 60)) ?>…
-                                    </a>
                                 </td>
                                 <td style="font-size:.85rem;"><?= htmlspecialchars($img['article_titre']) ?></td>
                                 <td class="actions">
@@ -181,7 +180,12 @@ $base = bo_base_path();
                     previewWrap.style.display = 'none';
                     return;
                 }
-                preview.src = v;
+                // Handle relative paths by prefixing with /frontoffice/
+                var previewUrl = v;
+                if (previewUrl.indexOf('http') !== 0 && previewUrl.charAt(0) !== '/') {
+                    previewUrl = '/frontoffice/' + previewUrl;
+                }
+                preview.src = previewUrl;
                 preview.onload = function() {
                     previewWrap.style.display = 'block';
                 };
