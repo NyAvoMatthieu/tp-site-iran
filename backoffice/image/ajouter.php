@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         try {
             $pdo->prepare("INSERT INTO image (id_contenu, url) VALUES (:c, :u)")
                 ->execute([':c' => $id_contenu, ':u' => $url]);
-            header('Location: ajouter.php?flash=' . urlencode('Image linked successfully.'));
+            header('Location: ' . bo_base_path() . 'image-ajouter?flash=' . urlencode('Image linked successfully.'));
             exit;
         } catch (PDOException $e) {
             $error = 'Database error: ' . $e->getMessage();
@@ -43,6 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 bo_head('Images', 'Manage article images in the IranWatch backoffice.');
 bo_nav('images');
+$base = bo_base_path();
 ?>
 
 <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -143,7 +144,7 @@ bo_nav('images');
                                 </td>
                                 <td style="font-size:.85rem;"><?= htmlspecialchars($img['article_titre']) ?></td>
                                 <td class="actions">
-                                    <form method="post" action="supprimer.php"
+                                    <form method="post" action="<?= $base ?>image-supprimer"
                                         onsubmit="return confirm('Remove this image link?')"
                                         aria-label="Delete image #<?= $img['id'] ?>">
                                         <input type="hidden" name="id" value="<?= $img['id'] ?>">

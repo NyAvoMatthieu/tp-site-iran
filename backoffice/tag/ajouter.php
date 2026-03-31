@@ -16,7 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         try {
             $pdo->prepare("INSERT INTO tag (libelle) VALUES (:l)")->execute([':l' => $libelle]);
-            header('Location: liste.php?flash=' . urlencode('Tag "' . $libelle . '" created.'));
+            header('Location: ' . bo_base_path() . 'tag-liste?flash=' . urlencode('Tag "' . $libelle . '" created.'));
             exit;
         } catch (PDOException $e) {
             /* Duplicate libelle */
@@ -31,6 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 bo_head('Add Tag', 'Create a new tag in the IranWatch backoffice.');
 bo_nav('tags');
+$base = bo_base_path();
 ?>
 
 <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -39,7 +40,7 @@ bo_nav('tags');
 
     <div class="page-header">
         <h1>Add Tag</h1>
-        <a href="liste.php" class="btn btn-secondary">← Back to tags</a>
+        <a href="<?= $base ?>tag-liste" class="btn btn-secondary">← Back to tags</a>
     </div>
 
     <?php bo_flash($error, 'error'); ?>
@@ -60,7 +61,7 @@ bo_nav('tags');
 
             <div class="form-actions">
                 <button type="submit" class="btn btn-primary" id="btn-save-tag">💾 Save Tag</button>
-                <a href="liste.php" class="btn btn-secondary">Cancel</a>
+                <a href="<?= $base ?>tag-liste" class="btn btn-secondary">Cancel</a>
             </div>
 
         </form>

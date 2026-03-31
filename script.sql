@@ -28,6 +28,10 @@ CREATE TABLE contenu (
     titre VARCHAR(255) NOT NULL,
     slug VARCHAR(255) NOT NULL UNIQUE,
     details TEXT NOT NULL,
+    meta_title VARCHAR(60),
+    meta_description VARCHAR(160),
+    keywords TEXT,
+    author_name VARCHAR(120),
 
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

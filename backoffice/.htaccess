@@ -6,10 +6,13 @@ RewriteEngine On
 RewriteCond %{REQUEST_FILENAME} -f
 RewriteRule ^ - [L]
 
-# Route : contenu-liste → contenu/liste.php & tag-liste → tag/liste.php
-RewriteRule ^([_a-z0-9]+)-liste$ $1/liste.php [L]
+RewriteCond %{REQUEST_FILENAME} -d
+RewriteRule ^ - [L]
 
-RewriteRule ^ajouter-image$ image/ajouter.php [L]
-RewriteRule ^dashboard$ dashboard.php [L]
-RewriteRule ^logout$ logout.php [L]
-RewriteRule ^login$ login.php [L]
+# Routes SEO for backoffice modules
+RewriteRule ^(contenu|tag|image)-(liste|ajouter|modifier|supprimer)$ $1/$2.php [L,QSA,NC]
+
+RewriteRule ^dashboard$ dashboard.php [L,QSA]
+RewriteRule ^seo-audit$ seo_audit.php [L,QSA]
+RewriteRule ^logout$ logout.php [L,QSA]
+RewriteRule ^login$ login.php [L,QSA]

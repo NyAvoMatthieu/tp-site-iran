@@ -57,9 +57,10 @@ function bo_nav(string $active = ''): void
     $links = [
         'dashboard' => [$base . 'dashboard',       '🏠 Dashboard'],
         'articles'  => [$base . 'contenu-liste',   '📰 Articles'],
-        'tags'      => [$base . 'tag-liste',        '🏷️ Tags'],
-        'images'    => [$base . 'ajouter-image',    '🖼️ Images'],
-        'logout'    => [$base . 'logout',           '🚪 Logout'],
+        'tags'      => [$base . 'tag-liste',       '🏷️ Tags'],
+        'images'    => [$base . 'image-ajouter',   '🖼️ Images'],
+        'seo'       => [$base . 'seo-audit',       '📈 SEO Audit'],
+        'logout'    => [$base . 'logout',          '🚪 Logout'],
     ];
     echo '<header class="bo-header" role="banner">';
     echo '<div class="bo-logo"><span class="bo-logo-icon">⚡</span><span>IranWatch</span><sup>Admin</sup></div>';

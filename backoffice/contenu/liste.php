@@ -8,7 +8,9 @@ admin_require_auth();
 $pdo = getDB();
 
 $articles = $pdo->query(
-    "SELECT c.id, c.titre, c.slug, c.created_at, tc.libelle AS type_label
+    "SELECT c.id, c.titre, c.slug, c.created_at, tc.libelle AS type_label,
+            LENGTH(COALESCE(c.meta_title, '')) AS meta_title_len,
+            LENGTH(COALESCE(c.meta_description, '')) AS meta_desc_len
      FROM   contenu c
      LEFT JOIN type_contenu tc ON tc.id = c.id_type
      ORDER  BY c.created_at DESC"
@@ -16,6 +18,7 @@ $articles = $pdo->query(
 
 bo_head('Articles', 'List of all articles in the IranWatch backoffice.');
 bo_nav('articles');
+$base = bo_base_path();
 ?>
 
 <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -24,13 +27,13 @@ bo_nav('articles');
 
     <div class="page-header">
         <h1>Articles</h1>
-        <a href="ajouter.php" class="btn btn-primary" id="btn-new-article">＋ New Article</a>
+        <a href="<?= $base ?>contenu-ajouter" class="btn btn-primary" id="btn-new-article">＋ New Article</a>
     </div>
 
     <?php if (empty($articles)): ?>
         <div class="empty-state" role="status">
             <p>No articles found. Create your first one.</p>
-            <a href="ajouter.php" class="btn btn-primary">＋ New Article</a>
+            <a href="<?= $base ?>contenu-ajouter" class="btn btn-primary">＋ New Article</a>
         </div>
     <?php else: ?>
         <div class="bo-table-wrap">
@@ -41,6 +44,7 @@ bo_nav('articles');
                         <th scope="col">Title</th>
                         <th scope="col">Slug</th>
                         <th scope="col">Type</th>
+                        <th scope="col">SEO</th>
                         <th scope="col">Published</th>
                         <th scope="col">Actions</th>
                     </tr>
@@ -63,17 +67,23 @@ bo_nav('articles');
                                 <?php endif; ?>
                             </td>
                             <td>
+                                <?php $seoOk = ($art['meta_title_len'] >= 50 && $art['meta_title_len'] <= 60) && ($art['meta_desc_len'] >= 150 && $art['meta_desc_len'] <= 160); ?>
+                                <span class="tag-pill" style="background:<?= $seoOk ? '#1f7a39' : '#8b1f2e' ?>;color:#fff;">
+                                    <?= $seoOk ? 'Good' : 'Fix' ?>
+                                </span>
+                            </td>
+                            <td>
                                 <time datetime="<?= date('c', strtotime($art['created_at'])) ?>">
                                     <?= date('d M Y', strtotime($art['created_at'])) ?>
                                 </time>
                             </td>
                             <td class="actions">
-                                <a href="modifier.php?id=<?= $art['id'] ?>"
+                                <a href="<?= $base ?>contenu-modifier?id=<?= $art['id'] ?>"
                                     class="btn btn-secondary btn-sm"
                                     aria-label="Edit article: <?= htmlspecialchars($art['titre']) ?>">
                                     ✏️ Edit
                                 </a>
-                                <a href="supprimer.php?id=<?= $art['id'] ?>"
+                                <a href="<?= $base ?>contenu-supprimer?id=<?= $art['id'] ?>"
                                     class="btn btn-danger btn-sm"
                                     aria-label="Delete article: <?= htmlspecialchars($art['titre']) ?>">
                                     🗑 Delete

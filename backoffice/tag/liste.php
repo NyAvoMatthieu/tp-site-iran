@@ -21,6 +21,7 @@ $tags = $pdo->query(
 
 bo_head('Tags', 'Manage content tags in the IranWatch backoffice.');
 bo_nav('tags');
+$base = bo_base_path();
 ?>
 
 <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -29,7 +30,7 @@ bo_nav('tags');
 
     <div class="page-header">
         <h1>Tags</h1>
-        <a href="ajouter.php" class="btn btn-primary" id="btn-new-tag">＋ New Tag</a>
+        <a href="<?= $base ?>tag-ajouter" class="btn btn-primary" id="btn-new-tag">＋ New Tag</a>
     </div>
 
     <?php bo_flash($flash); ?>
@@ -37,7 +38,7 @@ bo_nav('tags');
     <?php if (empty($tags)): ?>
         <div class="empty-state" role="status">
             <p>No tags yet. Add your first tag.</p>
-            <a href="ajouter.php" class="btn btn-primary">＋ New Tag</a>
+            <a href="<?= $base ?>tag-ajouter" class="btn btn-primary">＋ New Tag</a>
         </div>
     <?php else: ?>
 
@@ -70,7 +71,7 @@ bo_nav('tags');
                                     </span>
                                 </td>
                                 <td class="actions">
-                                    <form method="post" action="supprimer.php"
+                                    <form method="post" action="<?= $base ?>tag-supprimer"
                                         onsubmit="return confirm('Delete tag: <?= htmlspecialchars(addslashes($tag['libelle'])) ?>?')"
                                         aria-label="Delete tag <?= htmlspecialchars($tag['libelle']) ?>">
                                         <input type="hidden" name="id" value="<?= $tag['id'] ?>">

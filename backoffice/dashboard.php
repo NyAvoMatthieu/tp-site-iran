@@ -19,6 +19,7 @@ $recent = $pdo->query(
 
 bo_head('Dashboard', 'IranWatch admin dashboard – article, tag and image management.');
 bo_nav('dashboard');
+$base = bo_base_path();
 ?>
 
 <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -27,7 +28,7 @@ bo_nav('dashboard');
 
     <div class="page-header">
         <h1>Dashboard</h1>
-        <a href="contenu/ajouter.php" class="btn btn-primary">＋ New Article</a>
+        <a href="<?= $base ?>contenu-ajouter" class="btn btn-primary">＋ New Article</a>
     </div>
 
     <!-- Stats -->
@@ -55,21 +56,21 @@ bo_nav('dashboard');
         <h2 id="quickaccess-title" class="sr-only">Quick access</h2>
         <div class="dash-grid">
 
-            <a href="contenu/liste.php" class="dash-card" aria-label="Manage articles (<?= $totalArticles ?> total)">
+            <a href="<?= $base ?>contenu-liste" class="dash-card" aria-label="Manage articles (<?= $totalArticles ?> total)">
                 <span class="dash-card-icon" aria-hidden="true">📰</span>
                 <span class="dash-card-title">Articles</span>
                 <span class="dash-card-count"><?= $totalArticles ?></span>
                 <span class="dash-card-sub">View, edit, delete articles</span>
             </a>
 
-            <a href="tag/liste.php" class="dash-card" aria-label="Manage tags (<?= $totalTags ?> total)">
+            <a href="<?= $base ?>tag-liste" class="dash-card" aria-label="Manage tags (<?= $totalTags ?> total)">
                 <span class="dash-card-icon" aria-hidden="true">🏷️</span>
                 <span class="dash-card-title">Tags</span>
                 <span class="dash-card-count"><?= $totalTags ?></span>
                 <span class="dash-card-sub">Manage content tags</span>
             </a>
 
-            <a href="image/ajouter.php" class="dash-card" aria-label="Add images (<?= $totalImages ?> total)">
+            <a href="<?= $base ?>image-ajouter" class="dash-card" aria-label="Add images (<?= $totalImages ?> total)">
                 <span class="dash-card-icon" aria-hidden="true">🖼️</span>
                 <span class="dash-card-title">Images</span>
                 <span class="dash-card-count"><?= $totalImages ?></span>
@@ -102,7 +103,7 @@ bo_nav('dashboard');
                                 <td><span class="slug-pill"><?= htmlspecialchars($art['slug']) ?></span></td>
                                 <td><?= date('d M Y', strtotime($art['created_at'])) ?></td>
                                 <td class="actions">
-                                    <a href="contenu/liste.php" class="btn btn-secondary btn-sm">View all</a>
+                                    <a href="<?= $base ?>contenu-liste" class="btn btn-secondary btn-sm">View all</a>
                                 </td>
                             </tr>
                         <?php endforeach; ?>

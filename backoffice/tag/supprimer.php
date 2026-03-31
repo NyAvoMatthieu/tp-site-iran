@@ -13,11 +13,11 @@ if ($id && $_SERVER['REQUEST_METHOD'] === 'POST') {
         /* Remove from pivot first */
         $pdo->prepare("DELETE FROM contenu_tag WHERE id_tag = :id")->execute([':id' => $id]);
         $pdo->prepare("DELETE FROM tag WHERE id = :id")->execute([':id' => $id]);
-        header('Location: liste.php?flash=' . urlencode('Tag deleted.'));
+        header('Location: ' . bo_base_path() . 'tag-liste?flash=' . urlencode('Tag deleted.'));
     } catch (PDOException $e) {
-        header('Location: liste.php?flash=' . urlencode('Error: ' . $e->getMessage()));
+        header('Location: ' . bo_base_path() . 'tag-liste?flash=' . urlencode('Error: ' . $e->getMessage()));
     }
 } else {
-    header('Location: liste.php');
+    header('Location: ' . bo_base_path() . 'tag-liste');
 }
 exit;

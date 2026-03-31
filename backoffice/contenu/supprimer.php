@@ -9,7 +9,7 @@ $pdo = getDB();
 $id  = (int) ($_GET['id'] ?? $_POST['id'] ?? 0);
 
 if (!$id) {
-    header('Location: liste.php');
+    header('Location: ' . bo_base_path() . 'contenu-liste');
     exit;
 }
 
@@ -19,7 +19,7 @@ $stmt->execute([':id' => $id]);
 $article = $stmt->fetch();
 
 if (!$article) {
-    header('Location: liste.php');
+    header('Location: ' . bo_base_path() . 'contenu-liste');
     exit;
 }
 
@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['confirm'] ?? '') === 'yes'
         $pdo->prepare("DELETE FROM image       WHERE id_contenu = :id")->execute([':id' => $id]);
         $pdo->prepare("DELETE FROM contenu     WHERE id = :id")->execute([':id' => $id]);
         $pdo->commit();
-        header('Location: liste.php?flash=' . urlencode('Article deleted successfully.'));
+        header('Location: ' . bo_base_path() . 'contenu-liste?flash=' . urlencode('Article deleted successfully.'));
         exit;
     } catch (PDOException $e) {
         $pdo->rollBack();
@@ -42,6 +42,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && ($_POST['confirm'] ?? '') === 'yes'
 
 bo_head('Delete Article', 'Confirm article deletion in the IranWatch backoffice.');
 bo_nav('articles');
+$base = bo_base_path();
 ?>
 
 <a href="#main-content" class="skip-link">Skip to main content</a>
@@ -69,7 +70,7 @@ bo_nav('articles');
                     🗑 Yes, delete permanently
                 </button>
             </form>
-            <a href="liste.php" class="btn btn-secondary">Cancel</a>
+            <a href="<?= $base ?>contenu-liste" class="btn btn-secondary">Cancel</a>
         </div>
 
     </div>
