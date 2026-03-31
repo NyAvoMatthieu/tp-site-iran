@@ -10,7 +10,7 @@ function getDB(): PDO
     if ($pdo === null) {
         $dsn  = 'pgsql:host=localhost;dbname=iran_war';
         $user = 'postgres';
-        $pass = 'postgre';
+        $pass = 'michou25';
 
         try {
             $pdo = new PDO($dsn, $user, $pass, [

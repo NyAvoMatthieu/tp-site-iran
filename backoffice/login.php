@@ -62,7 +62,7 @@ $csrfToken = admin_csrf_token();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Connexion Backoffice</title>
-    <meta name="robots" content="noindex, nofollow">
+    <meta name="robots" content="noindex, nofollow"><link rel="stylesheet" href="assets/admin2.css">
     <style>
         body {
             font-family: Arial, sans-serif;

@@ -1,0 +1,232 @@
+/* =========================================================
+   IranWatch — Backoffice Login
+   assets/admin.css
+   ========================================================= */
+
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+
+/* ── Reset & base ──────────────────────────────────────── */
+*, *::before, *::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ── Page ──────────────────────────────────────────────── */
+body {
+  font-family: 'Inter', Arial, sans-serif;
+  min-height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #0d0d0d;
+  background-image:
+    radial-gradient(ellipse 80% 60% at 50% -10%, rgba(180, 30, 20, 0.18) 0%, transparent 70%),
+    url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.02'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+  padding: 24px;
+  overflow: hidden;
+  position: relative;
+}
+
+/* Ambient glow */
+body::before {
+  content: '';
+  position: fixed;
+  top: -200px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 700px;
+  height: 400px;
+  background: radial-gradient(ellipse, rgba(196, 40, 30, 0.12) 0%, transparent 70%);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* ── Card wrapper ──────────────────────────────────────── */
+body > h1,
+body > p.error,
+body > form {
+  position: relative;
+  z-index: 1;
+}
+
+/* Wrap h1 + error + form inside a card */
+body {
+  flex-direction: column;
+}
+
+body > * {
+  max-width: 420px;
+  width: 100%;
+}
+
+/* ── Branding heading ──────────────────────────────────── */
+h1 {
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #c4281e;
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+/* Logo mark before h1 */
+h1::before {
+  content: '⚡';
+  margin-right: 6px;
+  font-style: normal;
+}
+
+/* ── Error message ─────────────────────────────────────── */
+p.error {
+  background: rgba(196, 40, 30, 0.12);
+  border: 1px solid rgba(196, 40, 30, 0.4);
+  border-radius: 8px;
+  color: #f87171;
+  font-size: 13px;
+  padding: 10px 14px;
+  margin-bottom: 12px;
+  text-align: center;
+}
+
+/* ── Form card ─────────────────────────────────────────── */
+form {
+  background: rgba(20, 18, 18, 0.92);
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  border-radius: 16px;
+  padding: 36px 32px 32px;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  box-shadow:
+    0 0 0 1px rgba(196, 40, 30, 0.08),
+    0 32px 64px rgba(0, 0, 0, 0.6),
+    0 8px 24px rgba(0, 0, 0, 0.4);
+  margin-top: 0;
+}
+
+/* Top accent line */
+form::before {
+  content: '';
+  display: block;
+  height: 3px;
+  background: linear-gradient(90deg, transparent, #c4281e 40%, #e85444 60%, transparent);
+  border-radius: 2px;
+  margin-bottom: 28px;
+}
+
+/* ── Labels ────────────────────────────────────────────── */
+label {
+  display: block;
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 0.09em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.45);
+  margin-bottom: 6px;
+  margin-top: 20px;
+}
+
+form label:first-of-type {
+  margin-top: 0;
+}
+
+/* ── Inputs ────────────────────────────────────────────── */
+input[type="text"],
+input[type="password"] {
+  width: 100%;
+  padding: 11px 14px;
+  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 8px;
+  color: #f0ece8;
+  font-family: inherit;
+  font-size: 14px;
+  transition: border-color 0.2s, background 0.2s, box-shadow 0.2s;
+  outline: none;
+  -webkit-appearance: none;
+}
+
+input[type="text"]::placeholder,
+input[type="password"]::placeholder {
+  color: rgba(255, 255, 255, 0.2);
+}
+
+input[type="text"]:hover,
+input[type="password"]:hover {
+  border-color: rgba(255, 255, 255, 0.2);
+  background: rgba(255, 255, 255, 0.06);
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+  border-color: rgba(196, 40, 30, 0.7);
+  background: rgba(196, 40, 30, 0.05);
+  box-shadow: 0 0 0 3px rgba(196, 40, 30, 0.12);
+}
+
+/* ── Submit button ─────────────────────────────────────── */
+button[type="submit"] {
+  display: block;
+  width: 100%;
+  margin-top: 28px;
+  padding: 13px 20px;
+  background: #c4281e;
+  border: none;
+  border-radius: 8px;
+  color: #fff;
+  font-family: inherit;
+  font-size: 14px;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  cursor: pointer;
+  transition: background 0.2s, transform 0.1s, box-shadow 0.2s;
+  box-shadow: 0 4px 20px rgba(196, 40, 30, 0.35);
+  position: relative;
+  overflow: hidden;
+}
+
+button[type="submit"]::after {
+  content: '→';
+  margin-left: 8px;
+  display: inline-block;
+  transition: transform 0.2s;
+}
+
+button[type="submit"]:hover {
+  background: #d93526;
+  box-shadow: 0 6px 28px rgba(196, 40, 30, 0.5);
+}
+
+button[type="submit"]:hover::after {
+  transform: translateX(4px);
+}
+
+button[type="submit"]:active {
+  transform: scale(0.98);
+  background: #b02018;
+}
+
+/* ── Footer branding below form ────────────────────────── */
+form::after {
+  content: 'IranWatch · Backoffice sécurisé';
+  display: block;
+  margin-top: 24px;
+  font-size: 11px;
+  color: rgba(255, 255, 255, 0.18);
+  text-align: center;
+  letter-spacing: 0.06em;
+}
+
+/* ── CSRF hidden input (invisible) ─────────────────────── */
+input[type="hidden"] {
+  display: none;
+}
+
+/* ── Responsive ────────────────────────────────────────── */
+@media (max-width: 480px) {
+  form {
+    padding: 28px 20px 24px;
+    border-radius: 12px;
+  }
+}
